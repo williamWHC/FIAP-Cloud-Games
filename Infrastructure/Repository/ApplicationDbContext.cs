@@ -1,12 +1,13 @@
 ﻿using Domain.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Repository
 {
     public class ApplicationDbContext : DbContext
     {
         private readonly string _connectionString;
 
-        public ApplicationDbContext(string connectionString) => _connectionString = connectionString; 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Pessoa> Pessoas { get; set; }
         public DbSet<Jogo> Jogos { get; set; }
@@ -24,6 +25,5 @@ namespace Infrastructure.Repository
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
-
     }
 }

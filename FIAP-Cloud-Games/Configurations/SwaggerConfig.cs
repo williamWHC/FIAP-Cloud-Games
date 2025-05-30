@@ -1,4 +1,4 @@
-﻿namespace FIAP_Cloud_Games
+﻿namespace FIAP_Cloud_Games.Configurations
 {
     public static class SwaggerConfig
     {        

@@ -1,7 +1,8 @@
-﻿using AutoMapper;
-using Domain.Entity.DTOs;
+﻿using Application.DTOs;
+using AutoMapper;
+using Domain.Entity;
 
-namespace Domain.Entity.Mapping
+namespace Application.Mapping
 {
     public class MappingProfile : Profile
     {
@@ -9,6 +10,8 @@ namespace Domain.Entity.Mapping
         {
             CreateMap<Pessoa, PessoaDTO>();
             CreateMap<PessoaDTO, Pessoa>();
+            CreateMap<Jogo, JogoDTO>();
+            CreateMap<JogoDTO, Jogo>();
         }
     }
 }

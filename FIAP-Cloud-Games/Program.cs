@@ -1,6 +1,6 @@
-using Domain.Entity.Mapping;
+using Application.Mapping;
+using Application.Services;
 using Domain.Repository;
-using Domain.Services;
 using FIAP_Cloud_Games.Configurations;
 using FIAP_Cloud_Games.Endpoints;
 using Infrastructure.Repository;
@@ -21,6 +21,8 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 #region injeção de dependência
 builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
 builder.Services.AddScoped<PessoaService>();
+builder.Services.AddScoped<IJogoRepository, JogoRepository>();
+builder.Services.AddScoped<JogoService>();
 #endregion
 
 #region Swagger
@@ -112,6 +114,7 @@ app.UseHttpsRedirection();
 
 #region Map endpoints
 app.MapPessoaEndpoint();
+app.MapJogoEndpoint();
 #endregion
 
 app.Run();

@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using Domain.Entity;
-using Domain.Entity.DTOs;
-using Domain.Repository;
-using Domain.Services;
+﻿using Application.DTOs;
+using Application.Services;
 
 namespace FIAP_Cloud_Games.Endpoints
 {
@@ -14,7 +11,7 @@ namespace FIAP_Cloud_Games.Endpoints
 
             pessoaMapGroup.MapPost("/", CreatePessoa);
             pessoaMapGroup.MapPost("/login", Login);
-            pessoaMapGroup.MapPost("/reativar/id", ReactivateUser).RequireAuthorization("Administrador");
+            pessoaMapGroup.MapPatch("/reativar/id", ReactivateUser).RequireAuthorization("Administrador");
         }
 
         public static async Task<IResult> CreatePessoa(PessoaDTO pessoaDTO, PessoaService pessoaService)

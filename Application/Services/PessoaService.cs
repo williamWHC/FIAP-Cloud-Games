@@ -1,9 +1,8 @@
-﻿using AutoMapper;
+﻿using Application.DTOs;
+using AutoMapper;
 using Domain.Entity;
-using Domain.Entity.DTOs;
 using Domain.Repository;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,7 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Domain.Services
+namespace Application.Services
 {
     public class PessoaService
     {
@@ -66,7 +65,6 @@ namespace Domain.Services
             if (string.IsNullOrWhiteSpace(email))
                 return false;
 
-            // Regex padrão RFC 5322 simplificada
             var pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, pattern, RegexOptions.IgnoreCase);
         }

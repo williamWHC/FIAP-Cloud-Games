@@ -1,8 +1,11 @@
+using Application.Helper;
 using Application.Mapping;
 using Application.Services;
 using Domain.Repository;
 using FIAP_Cloud_Games.Configurations;
 using FIAP_Cloud_Games.Endpoints;
+using FIAP_Cloud_Games.Middleware;
+using Infrastructure.Middleware;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +26,8 @@ builder.Services.AddScoped<IPessoaRepository, PessoaRepository>();
 builder.Services.AddScoped<PessoaService>();
 builder.Services.AddScoped<IJogoRepository, JogoRepository>();
 builder.Services.AddScoped<JogoService>();
+builder.Services.AddTransient<ICorrelationIdGenerator, CorrelationIdGenerator>();
+builder.Services.AddTransient(typeof(BaseLogger<>));
 #endregion
 
 #region Swagger
@@ -115,6 +120,10 @@ app.UseHttpsRedirection();
 #region Map endpoints
 app.MapPessoaEndpoint();
 app.MapJogoEndpoint();
+#endregion
+
+#region Middleware
+app.UseCorrelationMiddleware();
 #endregion
 
 app.Run();

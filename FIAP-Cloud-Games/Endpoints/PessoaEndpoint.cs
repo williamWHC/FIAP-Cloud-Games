@@ -11,7 +11,7 @@ namespace FIAP_Cloud_Games.Endpoints
 
             pessoaMapGroup.MapPost("/", CreatePessoa);
             pessoaMapGroup.MapPost("/login", Login);
-            pessoaMapGroup.MapPatch("/reativar/id", ReactivateUser).RequireAuthorization("Administrador");
+            pessoaMapGroup.MapPatch("/reativar/id", ReactivatePessoa).RequireAuthorization("Administrador");
         }
 
         public static async Task<IResult> CreatePessoa(PessoaDTO pessoaDTO, PessoaService pessoaService)
@@ -26,7 +26,7 @@ namespace FIAP_Cloud_Games.Endpoints
             return TypedResults.Ok(loggedDTO);
         }
 
-        public static async Task<IResult> ReactivateUser(int id, PessoaService pessoaService)
+        public static async Task<IResult> ReactivatePessoa(int id, PessoaService pessoaService)
         {
             await pessoaService.ReactivatePessoaById(id);
             return TypedResults.NoContent();

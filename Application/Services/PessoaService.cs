@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Helper;
 using AutoMapper;
 using Domain.Entity;
 using Domain.Repository;
@@ -16,48 +17,59 @@ namespace Application.Services
     {
         IPessoaRepository _pessoaRepository;
         IMapper _mapper;
+        BaseLogger<PessoaService> _logger;
         private readonly IConfiguration _configuration;
 
-        public PessoaService(IPessoaRepository pessoaRepository, IMapper mapper, IConfiguration configuration)
+        public PessoaService(IPessoaRepository pessoaRepository, IMapper mapper, IConfiguration configuration, BaseLogger<PessoaService> logger)
         {
             _pessoaRepository = pessoaRepository;
             _mapper = mapper;
             _configuration = configuration;
+            _logger = logger;
         }
 
         public async Task AddPessoa(PessoaDTO pessoaDTO)
         {
+            _logger.LogInformation($"Adicionando nova pessoa.");
+
             if (!IsEmailValid(pessoaDTO.Email))
                 throw new Exception("sadas");
 
-            if (!IsSenhaValid(pessoaDTO.Senha)) 
+            if (!IsSenhaValid(pessoaDTO.Senha))
                 throw new Exception("asd");
 
             pessoaDTO.Senha = GenerateGuidFromSenha(pessoaDTO.Senha);
             var pessoaToAdd = _mapper.Map<Pessoa>(pessoaDTO);
             await _pessoaRepository.Add(pessoaToAdd);
+
+            _logger.LogInformation($"Nova pessoa adicionada.");
         }
 
         public async Task ReactivatePessoaById(int id)
         {
+            _logger.LogInformation($"Reativando pessoa com Id:{id}");
             Pessoa pessoa = await _pessoaRepository.GetById(id);
 
             if (pessoa == null)
                 throw new Exception("a");
 
             pessoa.IsActive = true;
+            _logger.LogInformation($"Pessoa com Id:{id} reativado");
             await _pessoaRepository.Update(pessoa);
         }
 
         public async Task<LoggedDTO> Login(LoginDTO loginDTO)
         {
+            _logger.LogInformation($"Efetuando login para {loginDTO.Email}.");
             loginDTO.Senha = GenerateGuidFromSenha(loginDTO.Senha);
             Pessoa pessoa = await _pessoaRepository.GetPessoaByEmailESenha(loginDTO.Email, loginDTO.Senha);
             if (pessoa == null || !pessoa.IsActive)
                 throw new Exception("asdas");
 
-            LoggedDTO loggedDTO = new LoggedDTO() { Email = loginDTO.Email, Token = GenerateJwtToken(pessoa)};
-            return loggedDTO; 
+            LoggedDTO loggedDTO = new LoggedDTO() { Email = loginDTO.Email, Token = GenerateJwtToken(pessoa) };
+
+            _logger.LogInformation($"Login efetuado para {loginDTO.Email}.");
+            return loggedDTO;
         }
 
         private bool IsEmailValid(string email)
@@ -108,7 +120,7 @@ namespace Application.Services
                 issuer: _configuration["Jwt:Issuer"],
                 signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             );
-            
+
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }

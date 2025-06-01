@@ -1,7 +1,6 @@
 ﻿
 using Application.DTOs;
 using Application.Services;
-using Domain.Entity;
 
 namespace FIAP_Cloud_Games.Endpoints
 {

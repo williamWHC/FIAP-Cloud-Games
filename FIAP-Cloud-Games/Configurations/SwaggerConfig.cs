@@ -1,7 +1,7 @@
 ﻿namespace FIAP_Cloud_Games.Configurations
 {
     public static class SwaggerConfig
-    {        
+    {
         public static void AddSwaggerDocumentation(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>

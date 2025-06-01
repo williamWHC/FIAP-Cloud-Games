@@ -1,4 +1,5 @@
-﻿using Infrastructure.Middleware;
+﻿using Application.Helper;
+using Infrastructure.Middleware;
 using Microsoft.Extensions.Primitives;
 
 namespace FIAP_Cloud_Games.Middleware
@@ -7,17 +8,21 @@ namespace FIAP_Cloud_Games.Middleware
     public class CorrelationMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly BaseLogger<CorrelationMiddleware> _logger;
         private const string _correlationIdHeader = "x-correlation-id";
 
-        public CorrelationMiddleware(RequestDelegate next)
+        public CorrelationMiddleware(RequestDelegate next, BaseLogger<CorrelationMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public Task Invoke(HttpContext httpContext, ICorrelationIdGenerator correlationIdGenerator)
         {
             var correlationId = GetCorrelationId(httpContext, correlationIdGenerator);
             AddCorrelationIdHeaderToResponse(httpContext, correlationId);
+
+            _logger.LogInformation($"Request: {httpContext.Request.Method} {httpContext.Request.Path}");
 
             return _next(httpContext);
         }

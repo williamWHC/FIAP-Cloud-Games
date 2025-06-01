@@ -124,6 +124,7 @@ app.MapJogoEndpoint();
 
 #region Middleware
 app.UseCorrelationMiddleware();
+app.UseGlobalErrorHandlingMiddleware();
 #endregion
 
 app.Run();

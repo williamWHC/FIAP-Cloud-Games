@@ -7,7 +7,7 @@ namespace FIAP_Cloud_Games.Endpoints
     {
         public static void MapPessoaEndpoint(this WebApplication app)
         {
-            var pessoaMapGroup = app.MapGroup("/usuario");
+            var pessoaMapGroup = app.MapGroup("/pessoa");
 
             pessoaMapGroup.MapPost("/", CreatePessoa);
             pessoaMapGroup.MapPost("/login", Login);

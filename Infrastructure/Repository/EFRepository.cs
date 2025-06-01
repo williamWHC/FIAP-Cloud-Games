@@ -20,9 +20,9 @@ namespace Infrastructure.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(T entity)
         {
-            _dbSet.Remove(await GetById(id));
+            _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }
 

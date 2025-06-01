@@ -16,7 +16,7 @@ namespace FIAP_Cloud_Games.Endpoints
 
         public static async Task<IResult> CreatePessoa(PessoaDTO pessoaDTO, PessoaService pessoaService)
         {
-            await pessoaService.AddPessoa(pessoaDTO);
+            await pessoaService.AddPessoa(pessoaDTO);            
             return TypedResults.Created();
         }
 

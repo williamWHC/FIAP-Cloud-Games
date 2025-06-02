@@ -47,7 +47,7 @@ namespace Application.Services
             Pessoa pessoa = await _pessoaRepository.GetById(id);
 
             if (pessoa == null)
-                throw new NotFoundException();
+                throw new NotFoundException("Não existe pessoa com Id: " + id);
 
             pessoa.IsActive = true;
             _logger.LogInformation($"Pessoa com Id:{id} reativado");

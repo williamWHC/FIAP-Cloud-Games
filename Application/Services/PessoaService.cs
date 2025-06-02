@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Exceptions;
 using Application.Helper;
 using AutoMapper;
 using Domain.Entity;
@@ -32,12 +33,7 @@ namespace Application.Services
         {
             _logger.LogInformation($"Adicionando nova pessoa.");
 
-            if (!IsEmailValid(pessoaDTO.Email))
-                throw new Exception("sadas");
-
-            if (!IsSenhaValid(pessoaDTO.Senha))
-                throw new Exception("asd");
-
+            ValidatePessoa(pessoaDTO);
             pessoaDTO.Senha = GenerateGuidFromSenha(pessoaDTO.Senha);
             var pessoaToAdd = _mapper.Map<Pessoa>(pessoaDTO);
             await _pessoaRepository.Add(pessoaToAdd);
@@ -51,7 +47,7 @@ namespace Application.Services
             Pessoa pessoa = await _pessoaRepository.GetById(id);
 
             if (pessoa == null)
-                throw new Exception("a");
+                throw new NotFoundException();
 
             pessoa.IsActive = true;
             _logger.LogInformation($"Pessoa com Id:{id} reativado");
@@ -63,14 +59,33 @@ namespace Application.Services
             _logger.LogInformation($"Efetuando login para {loginDTO.Email}.");
             loginDTO.Senha = GenerateGuidFromSenha(loginDTO.Senha);
             Pessoa pessoa = await _pessoaRepository.GetPessoaByEmailESenha(loginDTO.Email, loginDTO.Senha);
-            if (pessoa == null || !pessoa.IsActive)
-                throw new Exception("asdas");
+            if (pessoa == null)
+                throw new NotFoundException("Email ou senha inválidos");
+            if (!pessoa.IsActive)
+                throw new BadDataException("Conta inativa.");
 
             LoggedDTO loggedDTO = new LoggedDTO() { Email = loginDTO.Email, Token = GenerateJwtToken(pessoa) };
 
             _logger.LogInformation($"Login efetuado para {loginDTO.Email}.");
             return loggedDTO;
         }
+
+        private void ValidatePessoa(PessoaDTO pessoa)
+        {
+            string errorMessage = "";
+            errorMessage = ValidationHelper.ValidaEmpties<PessoaDTO>(pessoa, errorMessage);
+
+            if (!IsEmailValid(pessoa.Email))
+                errorMessage += "Email inválido. ";
+
+            if (!IsSenhaValid(pessoa.Senha))
+                errorMessage += "Senha deve conter no mínimo de 8 caracteres com números, letras e caracteres especiais. ";
+
+            if(!string.IsNullOrEmpty(errorMessage))
+                throw new BadDataException(errorMessage.Trim());
+        }
+
+        
 
         private bool IsEmailValid(string email)
         {
@@ -90,6 +105,8 @@ namespace Application.Services
             var pattern = @"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&^+=_\-])[A-Za-z\d@$!%*#?&^+=_\-]{8,}$";
             return Regex.IsMatch(senha, pattern);
         }
+
+
 
         private string GenerateGuidFromSenha(string senha)
         {

@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Exceptions;
 using Application.Helper;
 using AutoMapper;
 using Domain.Entity;
@@ -20,7 +21,12 @@ namespace Application.Services
         public async Task DeleteJogoById(int id)
         {
             _logger.LogInformation($"Deletando jogo com id: {id}.");
-            await _jogoRepository.Delete(id);
+            Jogo jogo = await _jogoRepository.GetById(id);
+
+            if (jogo == null)
+                throw new NotFoundException("Não existe jogo com Id: " + id);
+
+            await _jogoRepository.Delete(jogo);
             _logger.LogInformation($"Jogo com id {id} deletado.");
         }
 
@@ -28,7 +34,12 @@ namespace Application.Services
         {
             _logger.LogInformation($"Atualizando jogo com id: {id}.");
 
+            ValidateJogo(jogoDTO);
+
             Jogo jogo = await _jogoRepository.GetById(id);
+
+            if (jogo == null)
+                throw new NotFoundException("Não existe jogo com Id: " + id);
 
             jogo.Nome = jogoDTO.Nome;
             jogo.Empresa = jogoDTO.Empresa;
@@ -45,10 +56,20 @@ namespace Application.Services
         {
             _logger.LogInformation("Criando jogo.");
 
+            ValidateJogo(jogoDTO);
             Jogo jogo = _mapper.Map<Jogo>(jogoDTO);
             await _jogoRepository.Add(jogo);
 
             _logger.LogInformation("Jogo criado.");
+        }
+
+        private void ValidateJogo(JogoDTO jogo)
+        {
+            string errorMessage = "";
+            errorMessage = ValidationHelper.ValidaEmpties<JogoDTO>(jogo, errorMessage);
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                throw new BadDataException(errorMessage.Trim());
         }
 
         public async Task<List<JogoDTO>> GetAllJogos()

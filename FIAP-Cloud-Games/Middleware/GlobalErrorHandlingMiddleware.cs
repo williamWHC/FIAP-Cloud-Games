@@ -1,4 +1,5 @@
-﻿using Application.Helper;
+﻿using Application.Exceptions;
+using Application.Helper;
 
 namespace FIAP_Cloud_Games.Middleware
 {
@@ -19,6 +20,17 @@ namespace FIAP_Cloud_Games.Middleware
             try
             {
                 await _next(httpContext);
+            }
+            catch (BadDataException ex)
+            {
+                httpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await httpContext.Response.WriteAsync(ex.Message);
+                _logger.LogError($"Um erro ocorreu: {ex.Message}");
+            }
+            catch (NotFoundException ex)
+            {
+                httpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                _logger.LogError($"Um erro ocorreu: {ex.Message}");
             }
             catch (Exception ex)
             {

@@ -85,15 +85,10 @@ Toda a lógica de persistência está isolada em projetos de **Application** e *
 
 ## 🛠️ Tecnologias
 
-<p align="center">
-  <a href="https://docs.microsoft.com/dotnet/core/"><img src="https://skillicons.dev/icons?i=dotnet&theme=light" alt=".NET"/></a>
-  <a href="https://docs.microsoft.com/dotnet/csharp/"><img src="https://skillicons.dev/icons?i=csharp&theme=light" alt="C#"/></a>
-  <a href="https://www.postgresql.org/"><img src="https://skillicons.dev/icons?i=postgresql&theme=light" alt="PostgreSQL"/></a>
-  <a href="https://supabase.com/"><img src="https://skillicons.dev/icons?i=supabase&theme=light" alt="Supabase"/></a>
-  <a href="https://swagger.io/"><img src="https://skillicons.dev/icons?i=swagger&theme=light" alt="Swagger"/></a>
-  <a href="https://jwt.io/"><img src="https://skillicons.dev/icons?i=jwt&theme=light" alt="JWT"/></a>
-  <a href="https://xunit.net/"><img src="https://skillicons.dev/icons?i=xunit&theme=light" alt="xUnit"/></a>
-  <a href="https://github.com/"><img src="https://skillicons.dev/icons?i=github&theme=light" alt="GitHub"/></a>
+<p align="">
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=cs,dotnet,postgres,git,github" />
+  </a>
 </p>
 
 - **Linguagem**: C# 10.0 (.NET 8)
@@ -147,9 +142,17 @@ git clone https://github.com/LucasLosano/FIAP-Cloud-Games.git
 cd FIAP-Cloud-Games
 ```
 
+### 2. Restaurar Dependências
+
+Após clonar o respositório, execute o comando na pasta FIAP-Cloud-Games/
+
+```bash
+    dotnet restore
+```
+
 ---
 
-### 2. Ajustar ConnectionString
+### 3. Ajustar ConnectionString
 
 Abra o arquivo FIAP-Cloud-Games/appsettings.json
 
@@ -169,9 +172,13 @@ Abra o arquivo FIAP-Cloud-Games/appsettings.json
 
 ---
 
-### 3. Aplicar Migrations
+### 4. Aplicar Migrations
 
-No terminal, dentro da pasta raiz do repositório, navegue até Infrastructure/ e execute:
+No terminal, dentro da pasta raiz do repositório, navegue até **Infrastructure/** e execute:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
 
 ```bash
 cd Infrastructure
@@ -179,3 +186,25 @@ dotnet ef database update
 ```
 
 ---
+
+## ✅ Testes Unitários
+
+Toda a lógica de negócio crítica possui cobertura de testes em FIAP-Cloud-GamesTest. Para executar:
+
+Abra um terminal na pasta do projeto de testes, **FIAP-Cloud-Games/FIAP-Cloud-GamesTest**, execute:
+
+```bash
+cd FIAP-Cloud-GamesTest
+```
+
+Execute:
+
+```bash
+dotnet test
+```
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a MIT License. Sinta-se à vontade para clonar, adaptar e distribuir de acordo com os termos.

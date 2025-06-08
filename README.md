@@ -79,7 +79,7 @@ Toda a lógica de persistência está isolada em projetos de **Application** e *
 
 ![alt text](image-2.png)
 
-> Acesse o template completo no Miro: [Estrutura do Projeto no Miro](https://miro.com/app/board/uXjVIw6cuUU=/)
+> Acesse o template completo no Miro: [Estrutura do Projeto no Miro](https://miro.com/welcomeonboard/cXE4Y1pzeTViMndSUTY3ZU9RQzdBK1l6S09GL29jb2JFc3FjcW0vYkpKSUJJVG40R1R5VGhXVlBvVEpsZ1hXY1l5NGhoTzlwY0hLa0xESGw3LzRCNlFWN0I5L1dYMUs4REFsQi9ocmtETjFGZG1ESGFJL3Vpb3FjZkFFSFRWdVFnbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=997573404815)
 
 ---
 
